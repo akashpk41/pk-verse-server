@@ -59,7 +59,7 @@ const userSchema = new Schema(
 // pre hook, hash the user password before save to the database;
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
- 
+
   try {
     this.password = await bcrypt.hash(this.password, 10);
     next();
@@ -67,6 +67,16 @@ userSchema.pre("save", async function (next) {
     console.log(`Error in User Pre Hook`, err);
   }
 });
+
+// verify user password
+
+userSchema.methods.matchPassword = async function (enteredPassword) {
+  const isCorrectPassword = await bcrypt.compare(
+    enteredPassword,
+    this.password
+  );
+  return isCorrectPassword;
+};
 
 const User = model("User", userSchema);
 export default User;
