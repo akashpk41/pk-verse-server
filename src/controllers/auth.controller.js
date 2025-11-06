@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import { upsertStreamUser } from "../lib/stream.js";
 import User from "../models/User.js";
 
 export const signup = async (req, res) => {
@@ -44,6 +45,12 @@ export const signup = async (req, res) => {
     });
 
     //     TODO : Create stream user later
+
+    await upsertStreamUser({
+      id: newUser._id.toString(),
+      name: newUser.fullName,
+      image: newUser.profilePic || "",
+    });
 
     //    add  json web token
     const token = jwt.sign(
