@@ -68,7 +68,41 @@ export const signup = async (req, res) => {
   }
 };
 
-export const login = async (req, res) => {};
+export const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    // check all fields
+    if (!email || !password) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    //     return if the user already exist in the database;
+    const user = await User.findOne({ email });
+    if (!user)
+      return res.status(401).json({ message: "Invalid email or password" });
+
+    // check the correct password
+    const isPasswordCorrect = await user.matchPassword(password);
+    if (!isPasswordCorrect)
+      return res.status(401).json({ message: "Invalid email or password" });
+
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY, {
+      expiresIn: "7d",
+    });
+
+    res.cookie("jwt", token, {
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      httpOnly: true, // prevent XSS attacks,
+      sameSite: "strict", // prevent CSRF attacks
+      secure: process.env.NODE_ENV === "production",
+    });
+
+    res.status(200).json({ success: true, user });
+  } catch (error) {
+    console.log("Error in login controller", error.message);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
 export const logout = async (req, res) => {
   res.send("iam logout");
 };

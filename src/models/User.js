@@ -71,11 +71,11 @@ userSchema.pre("save", async function (next) {
 // verify user password
 
 userSchema.methods.matchPassword = async function (enteredPassword) {
-  const isCorrectPassword = await bcrypt.compare(
+  const isPasswordCorrect = await bcrypt.compare(
     enteredPassword,
     this.password
   );
-  return isCorrectPassword;
+  return isPasswordCorrect;
 };
 
 const User = model("User", userSchema);
