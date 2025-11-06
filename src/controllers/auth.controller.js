@@ -103,6 +103,7 @@ export const login = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
-export const logout = async (req, res) => {
-  res.send("iam logout");
+export const logout = (req, res) => {
+  res.clearCookie("jwt");
+  res.status(200).json({ success: true, message: "Logout successful" });
 };
