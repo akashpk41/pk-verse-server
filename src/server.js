@@ -4,6 +4,7 @@ import "dotenv/config";
 import express from "express";
 import { connectDB } from "./lib/db.js";
 import authRoute from "./router/auth.route.js";
+import chatRoutes from "./router/chat.route.js";
 import userRoutes from "./router/user.route.js";
 // configure
 const app = express();
@@ -24,6 +25,7 @@ app.use(cookieParser());
 // routes
 app.use("/api/auth", authRoute);
 app.use("/api/users", userRoutes);
+app.use("/api/chat", chatRoutes);
 
 app.get("/", (req, res) => {
   res.send("Welcome Home");
