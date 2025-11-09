@@ -1,4 +1,5 @@
-import User from "../models/User";
+import FriendRequest from "../models/FriendRequest.js";
+import User from "../models/User.js";
 
 export const getRecommendedUsers = async (req, res) => {
   try {
@@ -7,7 +8,7 @@ export const getRecommendedUsers = async (req, res) => {
     const recommendedUsers = await User.find({
       $and: [
         { _id: { $ne: currentUserId } }, // in recommended uses list dont show the current logged in user and his friends
-        { $id: { $nin: currentUser.friends } },
+        { _id: { $nin: currentUser.friends } },
         { isOnboarded: true },
       ],
     });
@@ -18,6 +19,8 @@ export const getRecommendedUsers = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+
 export const getMyFriends = async (req, res) => {
   try {
     const user = await User.findById(req.user.id)

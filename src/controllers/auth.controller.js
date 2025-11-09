@@ -86,7 +86,6 @@ export const login = async (req, res) => {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    //     return if the user already exist in the database;
     const user = await User.findOne({ email });
     if (!user)
       return res.status(401).json({ message: "Invalid email or password" });

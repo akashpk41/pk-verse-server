@@ -1,6 +1,9 @@
 import express from "express";
 import {
+  acceptFriendRequest,
+  getFriendRequests,
   getMyFriends,
+  getOutgoingFriendReqs,
   getRecommendedUsers,
   sendFriendRequest,
 } from "../controllers/user.controller.js";
