@@ -10,18 +10,26 @@ import userRoutes from "./router/user.route.js";
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const allowedOrigins =
-  process.env.NODE_ENV === "development"
-    ? [process.env.CLIENT_URL_DEV]
-    : [process.env.CLIENT_URL_PROD];
-// middlewares;
+const allowedOrigins = [
+  process.env.CLIENT_URL_DEV,
+  process.env.CLIENT_URL_PROD,
+];
+
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   })
 );
+
 app.use(express.json());
 app.use(cookieParser());
 
