@@ -10,15 +10,18 @@ import userRoutes from "./router/user.route.js";
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+const allowedOrigins =
+  process.env.NODE_ENV === "development"
+    ? [process.env.CLIENT_URL_DEV]
+    : [process.env.CLIENT_URL_PROD];
 // middlewares;
-
 app.use(
   cors({
-    origin: "http://localhost:5173",
-    credentials: true, // allow frontend to send cookies
+    origin: allowedOrigins,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   })
 );
-  
 app.use(express.json());
 app.use(cookieParser());
 
