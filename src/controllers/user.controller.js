@@ -20,7 +20,6 @@ export const getRecommendedUsers = async (req, res) => {
   }
 };
 
-
 export const getMyFriends = async (req, res) => {
   try {
     const user = await User.findById(req.user.id)
